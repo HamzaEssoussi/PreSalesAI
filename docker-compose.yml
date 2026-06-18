@@ -1,0 +1,62 @@
+version: '3.9'
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: presales_ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./data/ollama:/root/.ollama
+    restart: unless-stopped
+    networks:
+      - presales_network
+
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: presales_chromadb
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./data/chroma:/chroma/chroma
+    environment:
+      - CHROMA_SERVER_HOST=0.0.0.0
+      - ANONYMIZED_TELEMETRY=False
+    restart: unless-stopped
+    networks:
+      - presales_network
+
+  backend:
+    build: ./backend
+    container_name: presales_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - CHROMA_HOST=chromadb
+      - CHROMA_PORT=8000
+      - MODEL_NAME=mistral
+    depends_on:
+      - ollama
+      - chromadb
+    restart: unless-stopped
+    networks:
+      - presales_network
+
+  frontend:
+    build: ./frontend
+    container_name: presales_frontend
+    ports:
+      - "8501:8501"
+    environment:
+      - API_URL=http://backend:8000
+    depends_on:
+      - backend
+    networks:
+      - presales_network
+
+networks:
+  presales_network:
+    driver: bridge
