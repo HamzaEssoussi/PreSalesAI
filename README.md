@@ -547,9 +547,9 @@ This project is licensed under the **MIT License** — see [LICENSE](LICENSE) fo
 
 ## 📞 Contact
 
-- 📧 **Email**: [your-email@domain.com]
-- 💼 **LinkedIn**: [Your LinkedIn Profile]
-- 🐙 **GitHub**: [@your-username]
+- 📧 **Email**: hamza.essoussi@etudiant-enit.utm.tn
+- 💼 **LinkedIn**: http://www.linkedin.com/in/hamza-essoussi
+
 
 ---
 
